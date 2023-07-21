@@ -1,6 +1,5 @@
 package com.example.TaskPP314.service;
 
-import com.example.TaskPP314.model.Role;
 import com.example.TaskPP314.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -14,8 +13,6 @@ public interface UserService extends UserDetailsService {
 
     void delete(Long id);
 
-    User getAuthUser();
-
-    List<Role> getAllRoles();
+    User findByName(String username);
 
 }

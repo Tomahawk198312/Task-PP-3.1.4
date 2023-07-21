@@ -1,12 +1,8 @@
 package com.example.TaskPP314.service;
 
-import com.example.TaskPP314.model.Role;
 import com.example.TaskPP314.model.User;
-import com.example.TaskPP314.repository.RoleRepository;
 import com.example.TaskPP314.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,20 +15,17 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-                           PasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByName(name);
+        User user = findByName(name);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
@@ -59,14 +52,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAuthUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByName(auth.getName());
-    }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public User findByName(String username) {
+        return userRepository.findByName(username);
     }
 
 }
